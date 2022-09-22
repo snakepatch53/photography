@@ -1,0 +1,27 @@
+.images-container img {
+    aspect-ratio: 16/16;
+    object-fit: cover;
+    object-position: center;
+    cursor: pointer;
+}
+
+.image-item .datetime {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 13px;
+}
+
+.images-container .image-item button .uncheck {
+    display: none;
+}
+
+.images-container .image-item.check button.like .uncheck,
+.images-container .image-item.check button .check {
+    display: block;
+}
+
+.images-container .image-item.check button.like .check,
+.images-container .image-item.check button .uncheck {
+    display: none;
+}

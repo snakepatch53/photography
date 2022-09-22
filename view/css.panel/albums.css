@@ -1,0 +1,135 @@
+.images-container .frontpage {
+    overflow: hidden;
+    border-radius: 5px 5px 0 0;
+}
+
+.images-container .frontpage-el,
+.images-container img {
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    object-position: center;
+}
+
+/*modal uploadPhotos*/
+.modal-body .modalPhotoBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 10px;
+    border-style: dashed;
+    border-color: #eee;
+    border-radius: 10px;
+    gap: 10px;
+    transition: all 0.2s ease;
+}
+
+.modal-body.active .modalPhotoBody {
+    background: rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.modal-body .modalPhotoBody p {
+    margin: 0;
+}
+
+.modal-body.active .modalPhotoBody p.drag-n {
+    display: none;
+}
+
+.modal-body .modalPhotoBody p.drag-y {
+    display: none;
+}
+
+.modal-body.active .modalPhotoBody p.drag-y {
+    display: block;
+}
+
+.photos-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.photos-preview .preview-item {
+    display: flex;
+    width: 100%;
+    height: 40px;
+    border: solid 1px #eee;
+    border-radius: 5px;
+}
+
+.photos-preview .preview-item img {
+    width: 60px;
+    height: 100%;
+    object-fit: cover;
+    margin-right: 5px;
+    border-radius: 5px 0 0 5px;
+    pointer-events: none;
+}
+
+.photos-preview .preview-item .status {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 10px;
+}
+
+.photos-preview .preview-item .status .progress {
+    width: auto;
+    height: 8px;
+    margin-top: 5px;
+}
+
+.photos-preview .preview-item .status span {
+    white-space: nowrap;
+    width: calc(100% - 50px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    line-height: 17px;
+}
+
+.photos-preview .preview-item .status span.status-text {
+    font-size: 12px;
+}
+
+#element-modalViewPhoto img {
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    object-position: center;
+}
+
+#element-modalViewPhoto .card button {
+    transition: all 0.2s ease;
+}
+
+#element-modalViewPhoto .card button.select:hover,
+#element-modalViewPhoto .card button.select:focus {
+    background: transparent;
+    color: var(--bs-info);
+}
+
+#element-modalViewPhoto .card button:hover {
+    transform: scale(1.1);
+    transition: all 0.2s ease;
+}
+
+#element-modalViewPhoto button.select .uncheck {
+    display: none;
+}
+
+#element-modalViewPhoto button.select .check {
+    display: block;
+}
+
+#element-modalViewPhoto button.select.like .uncheck {
+    display: block;
+}
+
+#element-modalViewPhoto button.select.like .check {
+    display: none;
+}
