@@ -6,7 +6,6 @@ let INFO_DATABASE = [];
 function mainInfo() {
     formInfoInit();
     infoFormSelect();
-    console.log("hi");
 }
 
 // functions
@@ -49,10 +48,7 @@ function infoFormInsert($formInfo) {
         $formInfo.classList.remove("was-validated");
         $formInfo.querySelector(".msg-feetback").innerText = "Listo";
         infoFormSelect();
-        setTimeout(
-            () => ($formInfo.querySelector(".msg-feetback").innerText = ""),
-            1000
-        );
+        setTimeout(() => ($formInfo.querySelector(".msg-feetback").innerText = ""), 1000);
     });
 }
 
@@ -62,18 +58,12 @@ mainInfo();
 // CONTACT CRUD
 const $formContact = document.getElementById("element-contactform");
 const $element_table_contact = document.getElementById("element-table-contact");
-const bootstrap_modalform = new bootstrap.Modal(
-    document.getElementById("element-modalform"),
-    {
-        keyboard: false,
-    }
-);
-const bootstrap_modalconfirm = new bootstrap.Modal(
-    document.getElementById("element-modalconfirm"),
-    {
-        keyboard: false,
-    }
-);
+const bootstrap_modalform = new bootstrap.Modal(document.getElementById("element-modalform"), {
+    keyboard: false,
+});
+const bootstrap_modalconfirm = new bootstrap.Modal(document.getElementById("element-modalconfirm"), {
+    keyboard: false,
+});
 
 async function mainContact() {
     crudFunction.select();
@@ -103,9 +93,7 @@ const handleFunction = {
         bootstrap_modalform.show();
     },
     edit: function (contact_id) {
-        const contact = uiFunction.contactDatabase.find(
-            (el) => el.contact_id == contact_id
-        );
+        const contact = uiFunction.contactDatabase.find((el) => el.contact_id == contact_id);
         setValuesForm(contact, $formContact);
         bootstrap_modalform.show();
     },
@@ -126,7 +114,6 @@ const crudFunction = {
         const formData = new FormData(form);
         const action = $formContact.contact_id.value == 0 ? "insert" : "update";
         fetch_query(formData, "contact", action).then((res) => {
-            console.log(res);
             uiFunction.modalForm_hide();
             this.select();
         });
@@ -143,13 +130,7 @@ const crudFunction = {
 
 const uiFunction = {
     contactDatabase: [],
-    getTrcontact: function ({
-        contact_id,
-        contact_name,
-        contact_link,
-        contact_icon,
-        contact_color,
-    }) {
+    getTrcontact: function ({ contact_id, contact_name, contact_link, contact_icon, contact_color }) {
         return `
             <tr>
                 <td class="d-none d-md-table-cell fw-bold">${contact_id}</td>

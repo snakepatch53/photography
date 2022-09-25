@@ -1,136 +1,116 @@
-const $formPhotos = document.getElementById("element-formPhotos");
-const $photos_preview = document.getElementById("element-photos-preview");
+//variables
+let AlbumSelected_id = 0;
+
+// elements
+const $uploadarea = document.getElementById("uploadarea");
+const $uploadinput = document.getElementById("uploadinput");
+const $uploadbutton = document.getElementById("uploadbutton");
+const $preview = document.getElementById("preview");
 const $modalPhotoUpload = document.getElementById("element-modalPhotoUpload");
+
+// modal
 const bootstrap_modalPhoto = new bootstrap.Modal($modalPhotoUpload, {
     keyboard: false,
 });
 
+// modal event
 $modalPhotoUpload.addEventListener("hidden.bs.modal", async function (event) {
     await crudFunction.selectPhotos();
-    uiFunction.refreshFrontpage($formPhotos.album_id.value);
-    $formPhotos.album_id.value = 0;
+    uiFunction.refreshFrontpage(AlbumSelected_id);
+    AlbumSelected_id = 0;
+    $preview.innerHTML = "";
 });
 
-let files;
+// upload events
+$uploadbutton.onclick = () => $uploadinput.click();
+$uploadinput.onchange = (event) => handleChange(event);
+$uploadarea.ondragover = (event) => handleOver(event);
+$uploadarea.ondragleave = (event) => handleLeave(event);
+$uploadarea.ondrop = (event) => handleDrop(event);
 
-$formPhotos.btn_photos.onclick = (event) => $formPhotos.btn_filePhotos.click();
-
-$formPhotos.btn_filePhotos.onchange = function (event) {
-    files = this.files;
-    $formPhotos.classList.add("active");
-    photo_uiFunction.showFiles(files);
-    $formPhotos.classList.remove("active");
-};
-
-$formPhotos.ondragover = function (event) {
+// upload functioncs
+function handleOver(event) {
     event.preventDefault();
-    $formPhotos.classList.add("active");
-};
-
-$formPhotos.ondragleave = function (event) {
+    $uploadarea.classList.add("bg-dark");
+}
+function handleLeave(event) {
     event.preventDefault();
-    $formPhotos.classList.remove("active");
-};
-
-$formPhotos.ondrop = function (event) {
+    $uploadarea.classList.remove("bg-dark");
+}
+function handleDrop(event) {
     event.preventDefault();
-    // $photos_preview.innerHTML = "";
-    // files = undefined;
-    files = event.dataTransfer.files;
-    photo_uiFunction.showFiles(files);
-    $formPhotos.classList.remove("active");
-};
-
-const photo_uiFunction = {
-    showModal: function (album_id) {
-        bootstrap_modalPhoto.show();
-        $formPhotos.album_id.value = album_id;
-        $photos_preview.innerHTML = "";
-        files = undefined;
-    },
-    showFiles: async function (files) {
-        if (files.length === undefined) {
-            await this.processFile(files);
-            return;
-        }
-        for (const file of files) {
-            await this.processFile(file);
-        }
-    },
-    processFile: async function (file) {
-        const docType = file.type;
-        const validExtensions = ["image/jpeg", "image/jpg", "image/png"];
-        if (!validExtensions.includes(docType)) return; //archivo no valido
-        const fileReader = new FileReader();
-        const id = `file-${Math.random().toString(32).substring(7)}`;
-        fileReader.onload = (event) => {
-            const fileUrl = fileReader.result;
-            const image = `
-                <div class="preview-item" id="${id}">
-                    <img src="${fileUrl}" alt="${file.name}" loading="lazy" />
-                    <div class="status">
-                        <span>${file.name}</span>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            $photos_preview.innerHTML += image;
-        };
-        fileReader.readAsDataURL(file);
-        const formData = new FormData($formPhotos);
+    $uploadarea.classList.remove("bg-dark");
+    const files = event.dataTransfer.files;
+    hanldeFiles(files);
+}
+function handleChange(event) {
+    const files = uploadinput.files;
+    hanldeFiles(files);
+}
+async function hanldeFiles(files) {
+    const upload_id = `upload-${Math.random().toString(32).substring(7)}`;
+    for (const file of files) {
+        const file_id = `file-${Math.random().toString(32).substring(7)}`;
+        file.id = file_id;
+        const foto = await compressImg(file, 5);
+        $preview.innerHTML += getHtmlItem(foto.src, file_id, upload_id);
+    }
+    await waitLoadHTML(".miniPreviewImgItem." + upload_id, files.length);
+    let cont = 0;
+    for (const file of files) {
+        const item_img_id = "item-img-id-" + file.id;
+        const formData = new FormData();
         formData.append("file", file);
-
-        //timeout load dom
-        function timeout(ms) {
-            return new Promise((resolve) => setTimeout(resolve, ms));
-        }
-        let $progressbar = "";
-        while (!$progressbar) {
-            $progressbar = document.querySelector(`#${id} .progress .progress-bar`);
-            await timeout(100);
-        }
-        await fetch_ajax(formData, "photo", "insert", (event, percent) => {
-            $progressbar.style.width = percent + "%";
-            $progressbar.classList.remove("bg-danger");
-            $progressbar.classList.remove("bg-success");
-            $progressbar.classList.add("bg-info");
-        })
+        formData.append("album_id", AlbumSelected_id);
+        await fetch_ajax(formData, "photo", "insert", (event, percent) => handlePercent(item_img_id, percent, 0))
             .then((res) => {
                 if (res) {
-                    $progressbar.classList.remove("bg-danger");
-                    $progressbar.classList.remove("bg-info");
-                    $progressbar.classList.add("bg-success");
-                } else {
-                    $progressbar.classList.remove("bg-info");
-                    $progressbar.classList.remove("bg-success");
-                    $progressbar.classList.add("bg-danger");
+                    cont++;
+                    handlePercent(item_img_id, 100, 1);
+                    return;
                 }
+                handlePercent(item_img_id, 100, 2);
             })
-            .catch((res) => {
-                $progressbar.classList.remove("bg-info");
-                $progressbar.classList.remove("bg-success");
-                $progressbar.classList.add("bg-danger");
-            });
+            .catch((err) => handlePercent(item_img_id, 100, 2));
+    }
+    $preview.innerHTML += `
+        <p class="col col-12 text-center">${cont} fotos subidas, ${files.length - cont} fallidas</p>
+    `;
+}
 
-        // fetch_query(formData, "photo", "insert")
-        //     .then((res) => {
-        //         const $status = document.querySelector(`#${id} .status-text`);
-        //         if (res) {
-        //             $status.innerText = "Subido correctamente..";
-        //             $status.classList.add("text-success");
-        //             return;
-        //         }
-        //         $status.innerText = "Error al subir..";
-        //         $status.classList.add("text-danger");
-        //     })
-        //     .catch((res) => {
-        //         $status.innerText = "Error al subir..";
-        //         $status.classList.add("text-danger");
-        //     });
-        // Subir imagenes
-    },
-};
+// other functions
+function showUploadModal(album_id) {
+    bootstrap_modalPhoto.show();
+    AlbumSelected_id = album_id;
+}
 
-const photo_handleFunction = {};
+function getHtmlItem(src, file_id, upload_id) {
+    return `
+        <div class="col col-4 col-md-2 miniPreviewImgItem ${upload_id}" id="item-img-id-${file_id}">
+            <div class="card border border-info rounded-3">
+                <img class="m-0 p-0 rounded-top rounded-3" src="${src}" style="width:100%;height:50px;object-fit:cover;" />
+                <div class="progress m-2" style="height:8px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+async function waitLoadHTML(selector, numItems) {
+    let isLoad = false;
+    while (!isLoad) {
+        const loadHtml = $preview.querySelectorAll(selector);
+        if (loadHtml.length == numItems) isLoad = true;
+        await timeout(100);
+    }
+}
+
+function handlePercent(id, percent, state) {
+    const stateClassList = ["bg-info", "bg-success", "bg-danger"];
+    const stateClass = stateClassList[state];
+    const $itemImg = document.getElementById(id);
+    const $progressbar = $itemImg.querySelector(".progress-bar");
+    $progressbar.style.width = percent + "%";
+    stateClassList.map((el) => (stateClass != el ? $progressbar.classList.remove(el) : $progressbar.classList.add(stateClass)));
+}

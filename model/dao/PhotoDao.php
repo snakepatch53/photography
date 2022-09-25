@@ -18,6 +18,10 @@ class PhotoDao
     {
         return $this->conn->query("SELECT * FROM photo WHERE photo_id = $photo_id");
     }
+    public function selectByAlbum_id($album_id)
+    {
+        return $this->conn->query("SELECT * FROM photo WHERE album_id = $album_id");
+    }
     public function selectAlbum($album_id)
     {
         return $this->conn->query("SELECT * FROM photo WHERE album_id = $album_id");

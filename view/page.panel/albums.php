@@ -106,6 +106,7 @@
 <foot>
     <?php include('./view/component.panel/foot.php') ?>
     <script src="<?= $proyect['url'] ?>control/script.panel/albums.js"></script>
+    <script src="<?= $proyect['url'] ?>control/library/images.js"></script>
     <script src="<?= $proyect['url'] ?>control/script.panel/album.photo.js"></script>
     <script src="<?= $proyect['url'] ?>control/script.panel/album.view.js"></script>
 </foot>

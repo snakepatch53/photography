@@ -6,7 +6,6 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 include './../../dao/Mysql.php';
 include './../../dao/PhotoDao.php';
-include './../../library/compressImg.php';
 include './../../../config.php';
 $photoDao = new PhotoDao($proyect);
 if (isset(
@@ -25,9 +24,7 @@ if (isset(
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
         $photo_name = $photo_id . '.' . $extension;
         $hasta = $url . $photo_name;
-
-        copy($desde, $hasta);
-        // $copy = saveCompressImg($file, $photo_id, $url, 1180, 800);
+        move_uploaded_file($desde, $hasta);
         // update
         $photoDao->update($photo_name, $album_id, $photo_id);
         echo json_encode(true);

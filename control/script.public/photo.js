@@ -26,8 +26,8 @@ function handleView(button, view) {
 
 //ui functions
 function getHtmlItemphoto({ photo_id, photo_name, photo_like, photo_create }, index) {
-    let srcImg = $proyect.url + "view/img/notfound.gif";
-    if (photo_name !== "" && photo_name !== null) srcImg = $proyect.url + "view/img/photo/" + photo_name;
+    let srcImg = `${$proyect.url}model/script/photo/getphoto.php?photo_name=${photo_name}&photo_quality=20&photo_width=500`;
+    if (photo_name == null || photo_name == "") srcImg = `${$proyect.url}view/img/notfound.gif`;
     const date = moment(new Date(photo_create)).format("LLL");
     return `
         <div 

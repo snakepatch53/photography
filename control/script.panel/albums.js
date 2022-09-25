@@ -130,7 +130,7 @@ const uiFunction = {
                         <div class="container">
                             <div class="row gx-3">
                                 <div class="col-3">
-                                    <button class="btn btn-outline-success p-2" onclick="photo_uiFunction.showModal(${album_id})">
+                                    <button class="btn btn-outline-success p-2" onclick="showUploadModal(${album_id})">
                                         <i class="fa-solid fa-upload"></i>
                                     </button>
                                 </div>
@@ -209,11 +209,11 @@ const uiFunction = {
             for (let i = 0; i < max_photo; i++) {
                 const photo = photos[i];
                 const url = $proyect.url + "view/img/";
-                let imgSrc = url + "notfound.gif";
-                if (photo.photo_name != null && photo.photo_name != "") imgSrc = url + "photo/" + photo.photo_name;
-                html += `
-                    <img class="col-${col}" src="${imgSrc}" alt="${photo.photo_name}" loading="lazy" />
-                `;
+                // let imgSrc = url + "notfound.gif";
+                let imgSrc = `${$proyect.url}model/script/photo/getphoto.php?photo_name=${photo.photo_name}`;
+                // if (photo.photo_name != null && photo.photo_name != "") imgSrc = url + "photo/" + photo.photo_name;
+                html += `<img class="col-${col}" src="${imgSrc}" alt="${photo.photo_name}" loading="lazy" />`;
+                // html += `<img class="col-${col}" src="data:image/jpeg;base64,${photo.small}" alt="${photo.photo_name}" loading="lazy" />`;
             }
             html += `</div>`;
         }

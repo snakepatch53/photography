@@ -5,19 +5,17 @@
                 <h5 class="modal-title" id="element-modalPhotoUploadLabel">Subir fotos</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form class="modal-body" id="element-formPhotos" onsubmit="return false" enctype="multipart/form-data">
-                <input type="hidden" name="album_id" value="">
+            <div class="modal-body">
                 <!-- dropArea | ini -->
-                <div class=" container modalPhotoBody">
-                    <p class="fw-bold drag-n">Arrastra y suelta fotos</p>
-                    <p class="fw-bold drag-y">Suelta para subir los archivos</p>
-                    <span class="fw-bold">O</span>
-                    <button class="btn btn-outline-primary" name="btn_photos">Selecciona tus fotos</button>
-                    <input type="file" name="btn_filePhotos" hidden multiple>
+                <div class="border border-primary p-5 rounded-3 d-flex flex-column align-items-center" id="uploadarea">
+                    <h5 class="text-primary">Arrastra para subir</h5>
+                    <h5 class="text-primary">O</h5>
+                    <button class="btn btn-primary" id="uploadbutton">Selecciona tus fotos</button>
+                    <input class="p-5" type="file" id="uploadinput" accept="image/jpeg, image/png" hidden multiple>
                 </div>
-                <div class="container photos-preview" id="element-photos-preview"></div>
+                <div id="preview" class="mt-3 row g-1"></div>
                 <!-- dropArea | end -->
-            </form>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <!-- <button type="submit" class="btn btn-primary">Subir</button> -->
