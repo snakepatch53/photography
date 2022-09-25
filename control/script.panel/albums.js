@@ -209,7 +209,7 @@ const uiFunction = {
             for (let i = 0; i < max_photo; i++) {
                 const photo = photos[i];
                 const url = $proyect.url + "view/img/";
-                let imgSrc = `${$proyect.url}model/script/photo/getphoto.php?photo_name=${photo.photo_name}&photo_quality=20&photo_width=500`;
+                let imgSrc = `${$proyect.url}model/script/photo/getphoto.php?photo_name=${photo.photo_name}&photo_quality=20&photo_size=500`;
                 html += `<img class="col-${col}" src="${imgSrc}" alt="${photo.photo_name}" loading="lazy" />`;
             }
             html += `</div>`;

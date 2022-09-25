@@ -12,7 +12,7 @@ function showPhotoInImageviewer(index) {
     // $imageviewermodal.querySelector("img").src = `${$proyect.url}view/img/photo/${photo_name}`;
     $imageviewermodal.querySelector(
         "img"
-    ).src = `${$proyect.url}model/script/photo/getphoto.php?photo_name=${photo_name}&photo_quality=30&photo_width=800`;
+    ).src = `${$proyect.url}model/script/photo/getphoto.php?photo_name=${photo_name}&photo_quality=30&photo_size=800`;
     $buttonBeff.setAttribute("image-index", photo_beff);
     $buttonNext.setAttribute("image-index", photo_next);
     bootstrap_modalViewPhoto.show();
