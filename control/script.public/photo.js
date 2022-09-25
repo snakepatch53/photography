@@ -35,7 +35,7 @@ function getHtmlItemphoto({ photo_id, photo_name, photo_like, photo_create }, in
             id="element-photo-id-${photo_id}"
         >
             <div class="card p-0">
-                <img src="${srcImg}" class="card-img-top" alt="Foto del album" onclick="alert('jijiss')" loading="lazy">
+                <img src="${srcImg}" class="card-img-top" alt="Foto del album" onclick="showPhotoInImageviewer(${index})" loading="lazy">
                 <div class="card-body px-4 py-2">
                     <div class="row">
                         <div class="col-10">

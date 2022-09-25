@@ -1,11 +1,12 @@
 # photography
+
 # reservador_restaurants
 
 CREATE FILE "config.php"
 
 Write
 
-``` php
+```php
 <?php
 $proyect = [
     "name" => "{If it is in a hosting, leave it empty, but if it is in localhost, write the name of the folder inside www}",

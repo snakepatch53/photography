@@ -7,12 +7,14 @@
 <head>
     <?php include('./view/component.public/head.php') ?>
     <link rel="stylesheet" href="<?= $proyect['url'] ?>view/css.public/photo.css">
+    <link rel="stylesheet" href="<?= $proyect['url'] ?>view/css.public/imageviewer.css">
     <title>Fotos</title>
 </head>
 
 <body>
     <header><?php include('./view/component.public/header.php') ?></header>
     <?php include('./view/component.public/modalcontact.php') ?>
+    <?php include('./view/component.public/imageviewer.php') ?>
     <main>
         <div class="container text-center">
             <h4 class="my-4 text-center text-primary" id="element-title"></h4>
@@ -37,6 +39,7 @@
 </body>
 <foot>
     <?php include('./view/component.public/foot.php') ?>
+    <script src="<?= $proyect['url'] ?>control/script.public/imageviewer.js"></script>
     <script src="<?= $proyect['url'] ?>control/script.public/photo.js"></script>
 </foot>
 
