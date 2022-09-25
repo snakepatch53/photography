@@ -64,10 +64,8 @@ function getFrontpage(photos) {
         html = `<div class="row g-0 frontpage-el">`;
         for (let i = 0; i < max_photo; i++) {
             const photo = photos[i];
-            // let imgSrc = url + "notfound.gif";
             let imgSrc = `${$proyect.url}model/script/photo/getphoto.php?photo_name=${photo.photo_name}&photo_quality=20&photo_width=500`;
             if (photo.photo_name == null || photo.photo_name == "") imgSrc = `${$proyect.url}view/img/notfound.gif`;
-            // if (photo.photo_name != null && photo.photo_name != "") imgSrc = url + "photo/" + photo.photo_name;
             html += `
                 <img class="col-${col}" src="${imgSrc}" alt="${photo.photo_name}" loading="lazy" />
             `;

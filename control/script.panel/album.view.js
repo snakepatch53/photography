@@ -21,7 +21,7 @@ const viewPhoto_uiFunction = {
         const photos = uiFunction.photoDatabase.filter((el) => el.album_id == album_id);
         let html = "";
         for (const photo of photos) {
-            let imgSrc = `${$proyect.url}model/script/photo/getphoto.php?photo_name=${photo.photo_name}`;
+            let imgSrc = `${$proyect.url}model/script/photo/getphoto.php?photo_name=${photo.photo_name}&photo_quality=20&photo_width=500`;
             if (photo.photo_name == null || photo.photo_name == "") imgSrc = `${$proyect.url + "view/img/"}notfound.gif`;
             html += `
                 <div class="col-12 col-md-6 col-lg-3" id="item-view-${photo.photo_id}">

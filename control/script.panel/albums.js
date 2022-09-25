@@ -209,11 +209,8 @@ const uiFunction = {
             for (let i = 0; i < max_photo; i++) {
                 const photo = photos[i];
                 const url = $proyect.url + "view/img/";
-                // let imgSrc = url + "notfound.gif";
-                let imgSrc = `${$proyect.url}model/script/photo/getphoto.php?photo_name=${photo.photo_name}`;
-                // if (photo.photo_name != null && photo.photo_name != "") imgSrc = url + "photo/" + photo.photo_name;
+                let imgSrc = `${$proyect.url}model/script/photo/getphoto.php?photo_name=${photo.photo_name}&photo_quality=20&photo_width=500`;
                 html += `<img class="col-${col}" src="${imgSrc}" alt="${photo.photo_name}" loading="lazy" />`;
-                // html += `<img class="col-${col}" src="data:image/jpeg;base64,${photo.small}" alt="${photo.photo_name}" loading="lazy" />`;
             }
             html += `</div>`;
         }
