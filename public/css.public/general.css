@@ -1,0 +1,32 @@
+@font-face {
+    font-family: 'montserrat';
+    src: url('../font.general/montserrat.woff2') format('woff2');
+}
+
+:root {
+    --header-height: 70px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    /*    background: #000;*/
+}
+
+main {
+    padding: 30px 0;
+    min-height: calc(100vh - var(--header-height));
+}
+
+
+.frontpage-el {
+    opacity: 0.5;
+    transition: all 0.2s ease;
+}
+
+.frontpage-el:hover {
+    opacity: 0.8;
+    transition: all 0.2s ease;
+}

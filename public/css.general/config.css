@@ -1,0 +1,84 @@
+@font-face {
+/*    src: url('./../font.general/Roboto-Regular.ttf');*/
+    src: local("roboto");
+    font-weight: bold;
+    font-family: logo;
+}
+
+@font-face {
+/*    src: url('./../font.general/Pompiere-Regular.ttf');*/
+    src: local("roboto");
+    font-family: contenido;
+}
+
+@font-face {
+    src: url('./../font.general/Raleway-VariableFont_wght.ttf');
+    font-family: titulo;
+}
+
+:root {
+    --max-width: 1200px;
+    --padding: 50px;
+    --header-height: 90px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font-family: contenido, sans-serif;
+/*    user-select: none;*/
+    outline: none;
+    border-style: none;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding: var(--header-height);
+}
+
+body.dark {
+    background: #363636;
+}
+
+img {
+    pointer-events: none;
+}
+
+@media (max-width: 500px) {
+    * {
+        --padding: 25px;
+    }
+}
+
+@media (max-width: 400px) {
+    * {
+        --padding: 10px;
+    }
+}
+
+@media (max-width: 300px) {
+    * {
+        --padding: 5px;
+    }
+}
+
+/* _____________ SCROLL _ STYLES ________________ */
+.scroll-style::-webkit-scrollbar {
+    width: 3px;
+    height: 5px;
+}
+
+.scroll-style::-webkit-scrollbar-thumb {
+    background: var(--primary_background);
+    border-radius: 7px;
+}
+
+.scroll-style::-webkit-scrollbar-thumb:hover {
+    background: var(--primary_background_hover);
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-style::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+}

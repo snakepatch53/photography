@@ -1,0 +1,15 @@
+@api = http://localhost/constructora/services/user/
+
+###
+POST {{api}}login
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="user_user"
+
+admin
+--boundary
+Content-Disposition: form-data; name="user_pass"
+
+admin
+--boundary

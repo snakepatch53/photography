@@ -1,0 +1,32 @@
+@api = http://localhost/constructora/services/theme/
+
+###
+POST {{api}}select
+
+### Body x-www-form-multipart
+POST {{api}}insert
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="theme_name"
+
+theme_name_value
+--boundary
+Content-Disposition: form-data; name="theme_danger"
+
+theme_danger_value
+--boundary
+Content-Disposition: form-data; name="theme_info"
+
+theme_info_value
+
+
+
+###
+POST {{api}}delete
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="theme_id"
+
+3

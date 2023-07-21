@@ -1,0 +1,57 @@
+#imageviewermodal {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+#imageviewermodal .modal-content {
+    height: calc(100vh - 50px);
+    width: auto;
+    margin: auto;
+    overflow: hidden;
+    background: transparent;
+    border: none;
+}
+
+#imageviewermodal .modal-content img {
+    height: 100%;
+    object-fit: contain;
+}
+
+#imageviewermodal .buttons button {
+    position: fixed;
+}
+
+#imageviewermodal .buttons button.btn-close {
+    right: 30px;
+    top: 20px;
+    padding: 10px;
+}
+
+#imageviewermodal .buttons button:not(.btn-close) {
+    border: none;
+    background: none;
+    padding: 20px;
+    font-size: 30px;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+    top: 0;
+    bottom: 0;
+    height: 100px;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+#imageviewermodal .buttons button:not(.btn-close):hover {
+    opacity: 1;
+    transition: all 0.2s ease;
+}
+
+
+#imageviewermodal .buttons button.button-beff {
+    left: 10px;
+}
+
+#imageviewermodal .buttons button.button-next {
+    right: 10px;
+}

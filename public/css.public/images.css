@@ -1,0 +1,20 @@
+.images-container img {
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    object-position: center;
+}
+
+
+.images-container .image-item button .check {}
+
+.images-container .image-item button .uncheck {
+    display: none;
+}
+
+.images-container .image-item.check button .check {
+    display: none;
+}
+
+.images-container .image-item.check button .uncheck {
+    display: block;
+}

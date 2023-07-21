@@ -1,0 +1,11 @@
+.frontpage {
+    overflow: hidden;
+    border-radius: 5px 5px 0 0;
+}
+
+.frontpage-el,
+.images-container img {
+    aspect-ratio: 16/16;
+    object-fit: cover;
+    object-position: center;
+}

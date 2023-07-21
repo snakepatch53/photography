@@ -1,0 +1,197 @@
+.table-game {
+    height: calc(100vh - var(--header-height));
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.td-gift {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.marker-gift {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 0;
+    padding: 10px;
+}
+
+.item-gift {
+    /*    height: 100%;*/
+    height: calc((100vh - var(--header-height)) / var(--table-num-rows));
+    width: 100%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.item-gift:hover {
+    /*    transform: scale(1.1);*/
+}
+
+.item-gift .item-gift-container {
+    display: flex;
+    width: 200%;
+    height: 100%;
+    transition: all 0.2s ease !important;
+    margin-left: 0%;
+}
+
+.item-gift.active .item-gift-container {
+    margin-left: -100%;
+}
+
+.item-gift .view {
+    width: 100%;
+    height: 100%;
+}
+
+.item-gift .item-gift-img {
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    object-fit: contain;
+    object-position: center;
+}
+
+.item-gift .item-gift-gif {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    background-image: url('../img/gift.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+    transition: all 0.2s ease;
+}
+
+.item-gift .item-gift-gif:hover {
+    transition: all 0.2s ease;
+    background-image: url('../img/gift.gif');
+}
+
+#canvas-confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+
+.image-gift-winn {
+    display: block;
+    width: 100%;
+    max-width: 150px;
+    margin: auto;
+}
+
+
+/*game container*/
+.game-container {
+    display: flex;
+}
+
+.game-statusbar {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--header-height));
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px;
+}
+
+.game-statusbar .title {
+    margin: 5px 0;
+}
+
+.game-statusbar-container {
+    padding: 5px;
+    border: solid 1px var(--bs-primary);
+    border-radius: 3px;
+}
+
+.game-statusbar .card-item {
+    max-width: 250px;
+    display: flex;
+    overflow: hidden;
+    padding: 5px;
+    margin-bottom: 7px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    background: var(--bs-white);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.game-statusbar .card-item:hover {
+    transform: scale(1.1);
+    transition: all 0.2s ease;
+}
+
+.game-statusbar .card-item .card-title {
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.game-statusbar .card-item img {
+    /*    width: 100%;*/
+    width: 60px;
+    height: 40px;
+    object-fit: cover;
+    object-position: center;
+    margin: auto 0;
+    margin-right: 5px;
+    border: solid 1px rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+
+.game-statusbar .card-item p {
+    flex: 1;
+    overflow: hidden;
+    /*    white-space: nowrap;*/
+    text-overflow: ellipsis;
+    max-height: 15px;
+    font-size: 13px;
+    line-height: 15px;
+}
+
+@media (max-width:768px) {
+
+    body,
+    main {
+        overflow: auto !important;
+    }
+
+    .game-statusbar {
+        height: auto;
+        padding: 10px;
+        overflow: inherit;
+    }
+
+    .game-container {
+        flex-direction: column;
+    }
+
+    .game-statusbar .card-item {
+        padding: 20px 10px;
+        max-width: unset;
+    }
+
+    .game-statusbar .card-item img {
+        height: 40px;
+    }
+
+    .item-gift {
+        height: 100%;
+    }
+}
