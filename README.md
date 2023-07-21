@@ -2,34 +2,34 @@
 
 ## 📋 DATOS GENERALES
 
-<ul>
+<!-- <ul>
     <li><b>Cliente:</b> ✅ Constructora Erazo Brother's</li>
     <li><b>Estado:</b> 🚧 En desarrollo</li>
     <li><b>Version:</b> 🚀 1.0.0</li>
-    <li><b>Nombre:</b> 😎 Constructora Erazo Brother's</li>
+    <li><b>Nombre:</b> 😎 Constructora Erazo Brother's</li> -->
 </ul>
 
 ## 📋 DESCRIPCION
 
-<p>
+<!-- <p>
     Esta es una pagina web para la constructora Erazo Brother's, la cual se encarga de la construccion de casas y edificios en USA.
     <br><br>
     Esta desarrollada bajo las tecnologias web principales: <b>HTML5, CSS3, JS, PHP, MYSQL</b>
     <br><br>
     El lenguaje de programacion principal es <b>PHP</b> y el gestor de base de datos es <b>MYSQL</b>
-    <br><br>
+    <br><br> -->
 </p>
 
 ## 📝 LICENCIA
 
-<p>
+<!-- <p>
     Este proyecto es de código abierto, ¡lo que significa que es completamente libre! 🙌 Puedes usarlo, copiarlo, modificarlo y distribuirlo como desees para tus propios proyectos sin ningún tipo de restricciones. 🚀
     <br><br>
     Nos encanta la idea de que más personas puedan utilizar y mejorar nuestra pagina web y esperamos que lo disfrutes. 🤓
     <br><br>
     ¡Gracias por visitarnos y disfruta del código! 😎
     <br><br>
-</p>
+</p> -->
 
 # 📦 DOCUMENTACION DE INSTALACION
 
@@ -44,11 +44,10 @@ Crea el archivo <b><i>.env</i></b> en la raiz del proyecto y configuralo
 
 ```env
     # PROJECT
-    HTTP_DOMAIN = http://localhost/constructora/
-    HTML_LANG = 'en'
-    APP_NAME = 'erazobrothers'
+    HTTP_DOMAIN =
+    HTML_LANG =
+    APP_NAME =
     APP_STATE = 'development'
-    APP_ACCESS_TOKEN = {{CREATE YOUR PERSONAL ACCESS TOKEN}}
 
     # MYSQLI
     DB_HOST =
