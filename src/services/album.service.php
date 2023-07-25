@@ -59,6 +59,7 @@ class AlbumService
 
     public static function optimizeAlbum($DATA, $album_id)
     {
+        ob_end_clean();
         ob_end_flush();
         header('Access-Control-Allow-Origin: *');
         header('Content-Type: text/event-stream');
@@ -91,9 +92,8 @@ class AlbumService
             $result['message'] = 'Optimizando imagen #' . $i . ' de ' . (count($images) + 1) . '...';
             echo "data: " . json_encode($result) . "\n\n";
             ob_flush();
-            // flush();
-            if (ob_get_length() > 0) ob_flush();
-            usleep(250000); // Pausa durante un cuarto de segundo (250 milisegundos)
+            flush();
+            usleep(200000); // Pausa durante un cuarto de segundo (250 milisegundos)
             $path_folder_origin = $_PATH_FOLDER . $image;
             $path_folder_optimized = $_PATH_FOLDER_OPTIMIZED . $image;
             if (file_exists($path_folder_optimized)) continue;
