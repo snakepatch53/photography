@@ -91,7 +91,8 @@ class AlbumService
             $result['message'] = 'Optimizando imagen #' . $i . ' de ' . (count($images) + 1) . '...';
             echo "data: " . json_encode($result) . "\n\n";
             ob_flush();
-            flush();
+            // flush();
+            if (ob_get_length() > 0) ob_flush();
             usleep(250000); // Pausa durante un cuarto de segundo (250 milisegundos)
             $path_folder_origin = $_PATH_FOLDER . $image;
             $path_folder_optimized = $_PATH_FOLDER_OPTIMIZED . $image;
