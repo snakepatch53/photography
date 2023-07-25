@@ -82,6 +82,17 @@ class AlbumDao
         return $this->selectById($album_id);
     }
 
+    public function updatePicked($album_id, $album_photos_picked)
+    {
+        $result = $this->conn->query("
+            UPDATE album SET 
+                album_photos_picked='$album_photos_picked'
+            WHERE album_id = $album_id 
+        ");
+        if (!$result) return false;
+        return $this->selectById($album_id);
+    }
+
     public function delete($album_id)
     {
         $result = $this->conn->query("DELETE FROM album WHERE album_id = $album_id ");
@@ -91,6 +102,9 @@ class AlbumDao
 
     public function schematize($row)
     {
+        // get picked list
+        $picked_list = json_decode($row['album_photos_picked'], true);
+
         // frontpage
         $album_photo_url = $_ENV['HTTP_DOMAIN'] . '/public/img.albums/' . $row['album_photo'];
         if (!file_exists('./public/img.albums/' . $row['album_photo'])) {
@@ -99,7 +113,7 @@ class AlbumDao
         $row['album_photo_url'] = $album_photo_url;
 
         // photos
-        $folders = getAlbumsFolder();
+        $folders = getAlbumsFolder('./public/img.album.optimized/');
         $album_path = $row['album_path'];
         $album_photos = [];
         foreach ($folders as $folder) {
@@ -110,16 +124,20 @@ class AlbumDao
         }
         $new_album_photos = [];
         foreach ($album_photos as $album) {
-            $tmp_url = $_ENV['HTTP_DOMAIN'] . 'services/album/get_photo/' . $album_path . '/' . $album;
-            if (!file_exists('./albums/' . $album_path . '/' . $album)) {
+            $tmp_url = $_ENV['HTTP_DOMAIN'] . 'public/img.album.optimized/' . $album_path . '/' . $album;
+            if (!file_exists('./public/img.album.optimized/' . $album_path . '/' . $album)) {
                 $tmp_url = $_ENV['HTTP_DOMAIN'] . '/public/img/notfound.gif';
             }
+
+            $isPicked = false;
+            if (in_array($album, $picked_list)) $isPicked = true;
             $tmp = [
                 'id' => md5($album),
                 'url' => $tmp_url,
                 'folder' => $album_path,
                 'name' => $album,
-                'picked' => (strpos($album, "(selected)") !== false) ? true : false,
+                'name_without_ext' => pathinfo($album, PATHINFO_FILENAME),
+                'picked' => $isPicked
             ];
             $new_album_photos[] = $tmp;
         }

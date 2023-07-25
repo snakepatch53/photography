@@ -53,38 +53,56 @@ class AlbumService
             'status' => 'success',
             'message' => 'folders obtained successfully',
             'response' => true,
-            'data' => getAlbumsFolder()
+            'data' => getAlbumsFolder('./public/img.album.optimized/')
         ]);
     }
 
-    public static function optimizeImage($DATA, $folder, $photo_name)
+    public static function optimizeAlbum($DATA, $album_id)
     {
+        ob_end_flush();
         header('Access-Control-Allow-Origin: *');
-        $photo_mime = "image/jpeg";
-        $photo_quality = 200;
-        $photo_size = 400;
-        $path = "./albums/" . $folder . "/" . $photo_name;
-        if (isset($_GET['photo_quality'])) $photo_quality = $_GET['photo_quality'];
-        if (isset($_GET['photo_size'])) $photo_size = $_GET['photo_size'];
+        header('Content-Type: text/event-stream');
 
-        if (file_exists($path)) {
-            $photo_mime = getMimeFromPath($path);
-            list($width, $height, $type, $attr) = getimagesize($path);
-            $base64 = getBase64($path);
-            $base64 = qualityBase64img($base64, $photo_mime, $photo_quality);
-            if ($width >= $height) {
-                $base64 = resizeBase64andScaleHeight($base64, $photo_mime, $photo_size);
-            } else {
-                $base64 = resizeBase64andScaleWidth($base64, $photo_mime, $photo_size);
-            }
-            ob_start();
-            header("Content-type: $photo_mime");
-            echo base64_decode($base64);
-        } else {
-            ob_start();
-            header("Content-type: image/gif");
-            readfile($DATA['http_domain'] . "view/img/notfound.gif");
+        $result = [
+            'progress' => 0,
+            'message' => 'Optimizando imágenes...',
+            'status' => 'processing',
+        ];
+
+        $adapter = $DATA['mysqlAdapter'];
+        $albumDao = new AlbumDao($adapter);
+        $album = $albumDao->selectById($album_id);
+
+        if (!$album) {
+            $result['message'] = 'Album not found';
+            $result['status'] = 'error';
+            echo "data: " . json_encode($result) . "\n\n";
+            exit();
         }
+
+        $_PATH_FOLDER = './albums/' . $album['album_path'] . "/"; //path to folder with images
+        $_PATH_FOLDER_OPTIMIZED = './public/img.album.optimized/' . $album['album_path'] . "/"; //path to folder with optimized images
+        $images = getFiles($_PATH_FOLDER); // Get all images from folder
+        if (!file_exists($_PATH_FOLDER_OPTIMIZED)) mkdir($_PATH_FOLDER_OPTIMIZED);
+
+        foreach ($images as $i => $image) {
+            $progress = floor(($i / count($images)) * 100);
+            $result['progress'] = $progress;
+            $result['message'] = 'Optimizando imagen #' . $i . ' de ' . (count($images) + 1) . '...';
+            echo "data: " . json_encode($result) . "\n\n";
+            ob_flush();
+            flush();
+            usleep(250000); // Pausa durante un cuarto de segundo (250 milisegundos)
+            $path_folder_origin = $_PATH_FOLDER . $image;
+            $path_folder_optimized = $_PATH_FOLDER_OPTIMIZED . $image;
+            if (file_exists($path_folder_optimized)) continue;
+            optimizeImage($path_folder_origin, $path_folder_optimized);
+        }
+
+        $result['progress'] = 100;
+        $result['message'] = 'Imágenes optimizadas correctamente.';
+        $result['status'] = 'success';
+        echo "data: " . json_encode($result) . "\n\n";
     }
 
     public static function insert($DATA)
@@ -198,7 +216,9 @@ class AlbumService
     public static function pickPhoto($DATA)
     {
         // header('Content-Type: application/json');
-        // header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Origin: *');
+        $adapter = $DATA['mysqlAdapter'];
+        $albumDao = new albumDao($adapter);
         $result = [
             'status' => 'error',
             'message' => 'Data not found',
@@ -206,54 +226,47 @@ class AlbumService
             'data' => null
         ];
         if (!isset(
-            $_POST['folder'],
-            $_POST['photo'],
+            $_POST['album_id'],
+            $_POST['album_photo_name'],
             $_POST['pick']
         )) {
             echo json_encode($result);
             exit();
         }
-        $folder = $_POST['folder'];
-        $photo = $_POST['photo'];
-        $extension = pathinfo($photo, PATHINFO_EXTENSION);
-        $pick = $_POST['pick']; // true or false
-        $path = "./albums/" . $folder . "/" . $photo;
-        if (!file_exists($path)) {
-            $result['status'] = 'success';
-            $result['message'] = 'Photo not found';
+        $album_id = $_POST['album_id'];
+        $album_photo_name = $_POST['album_photo_name'];
+        $pick = $_POST['pick'];
+
+        $album = $albumDao->selectById($album_id);
+
+        if (!$album) {
+            $result['message'] = 'Album not found';
             echo json_encode($result);
             exit();
         }
+
+        $album_photos_picked = json_decode($album['album_photos_picked'], true);
 
         if ($pick == 'true') {
-            if (strpos($photo, "(selected)") !== false) {
-                $result['response'] = true;
-                $result['status'] = 'success';
-                $result['message'] = 'Photo already picked';
-                echo json_encode($result);
-                exit();
+            if (!in_array($album_photo_name, $album_photos_picked)) {
+                array_push($album_photos_picked, $album_photo_name);
             }
-            $new_photo = str_replace("." . $extension, "(selected)." . $extension, $photo);
-            rename($path, "./albums/" . $folder . "/" . $new_photo);
-            $result['response'] = true;
-            $result['message'] = 'Photo picked successfully';
-            $result['data'] = $new_photo;
+        } else {
+            if (in_array($album_photo_name, $album_photos_picked)) {
+                $album_photos_picked = array_diff($album_photos_picked, [$album_photo_name]);
+            }
+        }
+        $query_rs = $albumDao->updatePicked($album_id, json_encode($album_photos_picked));
+        if (!$query_rs) {
+            $result['message'] = 'Error updating album';
             echo json_encode($result);
             exit();
         }
 
-        if (strpos($photo, "(selected)") !== false) {
-            $new_photo = str_replace("(selected)." . $extension, "." . $extension, $photo);
-            rename($path, "./albums/" . $folder . "/" . $new_photo);
-            $result['response'] = true;
-            $result['message'] = 'Photo unpicked successfully';
-            $result['data'] = $new_photo;
-            echo json_encode($result);
-            exit();
-        }
-        $result['response'] = true;
         $result['status'] = 'success';
-        $result['message'] = 'Photo already unpicked';
+        $result['message'] = 'Album updated successfully';
+        $result['response'] = true;
+        $result['data'] = $album_photos_picked;
         echo json_encode($result);
     }
 

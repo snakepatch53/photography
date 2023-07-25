@@ -111,6 +111,26 @@
         </div>
     </div>
     <!-- confirm | end -->
+    <!-- progress optimize | ini -->
+    <div class="modal fade" id="element-modalprogressoptimize" tabindex="-1" data-bs-backdrop="static" aria-labelledby="element-modalprogressoptimizeLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="element-modalprogressoptimizeLabel">Optimizando fotos del album</h5>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Espere un momento por favor, estamos optimizando las fotos para mejorar el rendimiento de la pagina para comodidad del cliente..</p>
+                    <div class="progress m-2" style="height:20px;width:95%;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">0%</div>
+                    </div>
+                    <p class="text-center"><i class="message"></i></p>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- progress optimize | end -->
     <!-- MODAL | END -->
     <?php include('./src/templates/panel.component/album_photoUpload.php') ?>
 </body>
@@ -118,7 +138,6 @@
     <?php include('./src/templates/panel.component/foot.php') ?>
     <script src="<?= $DATA['http_domain'] ?>public/js.panel/albums.js"></script>
     <script src="<?= $DATA['http_domain'] ?>public/js.general/images.js"></script>
-    <script src="<?= $DATA['http_domain'] ?>public/js.panel/album.photo.js"></script>
     <script src="<?= $DATA['http_domain'] ?>public/js.panel/album.view.js"></script>
 </foot>
 

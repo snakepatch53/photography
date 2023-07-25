@@ -13,20 +13,20 @@ async function InicioMain() {
 
 //handle functions
 function handleView(button, view) {
-    const condition = ({ photo_like }) => {
+    const condition = (photo_like) => {
         if (view == 0) return true;
         if (view == 1) return photo_like == true;
         if (view == 2) return photo_like != true;
     };
-    const photo_array = photoDatabase.filter((el) => condition(el));
+    const photo_array = photoDatabase.filter((el) => condition(el.picked));
     document.querySelectorAll(".visibility-items").forEach((el) => el.classList.remove("disabled"));
     button.classList.add("disabled");
     refreshphoto(photo_array);
 }
 
 //ui functions
-function getHtmlItemphoto({ id, url, name, folder, picked }, index) {
-    const date = moment(new Date()).format("LLL");
+function getHtmlItemphoto({ id, url, name, name_without_ext, folder, picked }, index) {
+    // if (picked) console.log(name);
     return `
         <div 
             class="col-xl-3 col-lg-4 col-md-6 col-12 text-dark text-decoration-none image-item check" 
@@ -37,12 +37,12 @@ function getHtmlItemphoto({ id, url, name, folder, picked }, index) {
                 <div class="card-body px-4 py-2">
                     <div class="row">
                         <div class="col-10">
-                            <span class="text-info datetime">${date}</span>
+                            <span class="text-info datetime">${name_without_ext}</span>
                             <span class="text-primary">#${index + 1}</span>
                         </div>
                         <button 
                             class="border-0 bg-transparent text-primary col-2 p-2 fs-4 select ${
-                                picked == true ? "like" : ""
+                                picked ? "like" : ""
                             }" 
                             onclick="likePhoto('${id}')"
                         >
@@ -74,26 +74,21 @@ async function selectAlbumById() {
     });
 }
 
-function likePhoto(id) {
-    const { folder, name, picked } = photoDatabase.find((el) => el.id == id);
-    const photo = name;
+function likePhoto(photo_id) {
+    const { name, picked } = photoDatabase.find((el) => el.id == photo_id);
     const pick = !picked;
     const formData = new FormData();
-    formData.append("folder", folder);
-    formData.append("photo", photo);
+    formData.append("album_id", $album_id);
+    formData.append("album_photo_name", name);
     formData.append("pick", pick);
+    // console.log(album_id, name, pick);
     fetch_query(formData, "album", "pick_photo").then((res) => {
         const new_name = res.data;
-        const btn_like = document.querySelector(`#element-photo-id-${id} button.select`);
-        if (pick) {
-            console.log("like");
-            btn_like.classList.add("like");
-        } else {
-            console.log("unlike");
-            btn_like.classList.remove("like");
-        }
+        const btn_like = document.querySelector(`#element-photo-id-${photo_id} button.select`);
+        if (pick) btn_like.classList.add("like");
+        else btn_like.classList.remove("like");
         photoDatabase.map((el) => {
-            if (el.id == id) {
+            if (el.id == photo_id) {
                 el.picked = pick;
                 el.name = new_name;
             }

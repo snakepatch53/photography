@@ -36,10 +36,10 @@ $radapter->post('/services/category/delete', fn () => middlewareSessionServicesL
 // ALBUM
 $radapter->post('/services/album/select', fn (...$args) => AlbumService::select(...$args));
 $radapter->post('/services/album/select_by_id', fn (...$args) => AlbumService::selectById(...$args));
-$radapter->post('/services/album/get_folders', fn (...$args) => AlbumService::getFolders(...$args));
 $radapter->post('/services/album/pick_photo', fn (...$args) => AlbumService::pickPhoto(...$args));
-$radapter->getHTML('/services/album/get_photo/{folder}/{photo_name}', false, fn (...$args) => AlbumService::optimizeImage(...$args));
 // need to be logged
+$radapter->post('/services/album/get_folders', fn () => middlewareSessionServicesLogin(), fn (...$args) => AlbumService::getFolders(...$args));
+$radapter->getHTML('/services/album/optimize_album/{album_id}', false, fn () => middlewareSessionServicesLogin(), fn (...$args) => AlbumService::optimizeAlbum(...$args), false);
 $radapter->post('/services/album/insert', fn () => middlewareSessionServicesLogin(), fn (...$args) => AlbumService::insert(...$args));
 $radapter->post('/services/album/update', fn () => middlewareSessionServicesLogin(), fn (...$args) => AlbumService::update(...$args));
 $radapter->post('/services/album/delete', fn () => middlewareSessionServicesLogin(), fn (...$args) => AlbumService::delete(...$args));

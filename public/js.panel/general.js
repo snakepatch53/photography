@@ -19,3 +19,11 @@ function logout() {
         if (res) return (location.href = `${$proyect.url}login`);
     });
 }
+function updateTooltipsBootstrap() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+}
+
+updateTooltipsBootstrap();

@@ -3,6 +3,7 @@ const $form = document.getElementById("element-albumform");
 const $search = document.getElementById("element-search");
 // const $element_album_pass = document.querySelector("form input[name=usuario_pass]");
 const $element_table_album = document.getElementById("element-table-album");
+const $modalprogressoptimize = document.getElementById("element-modalprogressoptimize");
 const bootstrap_modalform = new bootstrap.Modal(document.getElementById("element-modalform"), {
     keyboard: false,
 });
@@ -12,6 +13,10 @@ const bootstrap_modalconfirm = new bootstrap.Modal(
         keyboard: false,
     }
 );
+
+const bootstrap_modalprogressoptimize = new bootstrap.Modal($modalprogressoptimize, {
+    keyboard: false,
+});
 
 async function main() {
     // await crudFunction.selectPhotos();
@@ -107,13 +112,45 @@ const crudFunction = {
     //         uiFunction.photoDatabase = res.data;
     //     });
     // },
-    insertUpdate: function (form) {
+    insertUpdate: async function (form) {
         const formData = new FormData(form);
         const action = $form.album_id.value == 0 ? "insert" : "update";
-        fetch_query(formData, "album", action).then((res) => {
+        await fetch_query(formData, "album", action).then(async (res) => {
             uiFunction.modalForm_hide();
+            await crudFunction.optimizeAlbum(res.data.album_id);
             this.select();
         });
+    },
+    optimizeAlbum: function (album_id) {
+        bootstrap_modalprogressoptimize.show();
+        const $progressbar = $modalprogressoptimize.querySelector(".progress-bar");
+        const $message = $modalprogressoptimize.querySelector(".message");
+        $progressbar.style.width = "0%";
+        $progressbar.innerHTML = "0%";
+        $message.innerHTML = "Optimizando album..";
+        $progressbar.classList.remove("bg-success");
+        $progressbar.classList.remove("bg-danger");
+        $progressbar.classList.add("bg-info");
+
+        const eventSource = new EventSource(
+            http_domain + "services/album/optimize_album/" + album_id
+        );
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            $progressbar.style.width = data.progress + "%";
+            $progressbar.innerHTML = data.progress + "%";
+            $message.innerHTML = data.message;
+
+            if (data.progress > 90) {
+                $progressbar.classList.remove("bg-info");
+                $progressbar.classList.add("bg-success");
+            }
+
+            if (data.status == "success") {
+                eventSource.close();
+                bootstrap_modalprogressoptimize.hide();
+            }
+        };
     },
     delete: function () {
         const formData = new FormData($form);
@@ -151,8 +188,15 @@ const uiFunction = {
                         <div class="container">
                             <div class="row gx-3">
                                 <div class="col-3">
-                                    <button class="btn btn-outline-success p-2" onclick="showUploadModal(${album_id})">
-                                        <i class="fa-solid fa-upload"></i>
+                                    <button 
+                                        type="button"
+                                        class="btn btn-outline-success p-2" 
+                                        onclick="crudFunction.optimizeAlbum(${album_id})" 
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-placement="top" 
+                                        title="Actualizar optimizacion"
+                                    >
+                                    <i class="fa-solid fa-rotate-right"></i>
                                     </button>
                                 </div>
                                 <div class="col-3">
@@ -184,6 +228,7 @@ const uiFunction = {
             html += this.getTralbum(album);
         }
         $element_table_album.innerHTML = html;
+        updateTooltipsBootstrap();
     },
     refresSelectclient: function () {
         let html = "<option value=''>Selecciona un usuario..</option>";

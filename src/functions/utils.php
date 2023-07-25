@@ -51,9 +51,9 @@ function getUserTypes()
     ];
 }
 
-function getAlbumsFolder()
+function getAlbumsFolder($path)
 {
-    $PATH = './albums/';
+    $PATH = $path;
     // get folders name from path
     $folders = array_filter(glob($PATH . '*'), 'is_dir');
     $folders = array_map(function ($folder) {
@@ -71,4 +71,37 @@ function getAlbumsFolder()
         ];
     }, $folders);
     return $folders;
+}
+
+
+
+function getFiles($path, $ext = 'jpg|jpeg|png|gif|bmp')
+{
+    $files = array();
+    $dir = opendir($path);
+    while ($file = readdir($dir)) {
+        if (preg_match('/^.*\.(' . $ext . ')$/i', $file)) {
+            $files[] = $file;
+        }
+    }
+    closedir($dir);
+    return $files;
+}
+
+function optimizeImage($path_from, $path_to, $quality = 50, $size = 800)
+{
+    $image = Intervention\Image\ImageManagerStatic::make($path_from); // Cargar la imagen original
+
+    // Optimizar la imagen con una calidad específica (0 a 100, siendo 100 la mejor calidad)
+    $image->encode('jpg', $quality);
+    // Define el tamaño máximo deseado (800x800 píxeles)
+    $tamañoMaximo = $size;
+    // Redimensiona la imagen para que se ajuste dentro de un cuadro de 800x800 píxeles sin recortar
+    $image->resize($tamañoMaximo, $tamañoMaximo, function ($constraint) {
+        $constraint->aspectRatio();
+        $constraint->upsize();
+    });
+    // Guardar la imagen optimizada
+    $image->save($path_to);
+    return true;
 }

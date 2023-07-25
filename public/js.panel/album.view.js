@@ -5,8 +5,6 @@ const bootstrap_modalViewPhoto = new bootstrap.Modal($bootstrap_modalViewPhoto, 
 });
 
 $bootstrap_modalViewPhoto.addEventListener("hidden.bs.modal", async function (event) {
-    await crudFunction.selectPhotos();
-    uiFunction.refreshFrontpage(viewPhoto_uiFunction.album_id);
     viewPhoto_uiFunction.album_id = 0;
 });
 
@@ -18,36 +16,24 @@ const viewPhoto_uiFunction = {
         bootstrap_modalViewPhoto.show();
     },
     printHtml: function (album_id) {
-        const path = uiFunction.albumDatabase.find((el) => el.album_id == album_id).album_path;
-        const photos = uiFunction.folderDatabase.find((el) => el.folder == path);
+        const photos = uiFunction.albumDatabase.find((el) => el.album_id == album_id).album_photos;
         let html = "";
-        for (const photo of photos.files) {
-            let imgSrc = `${http_domain}albums/${photos.folder}/${photo}`;
-            // if (photo.photo_name == null || photo.photo_name == "")
-            //     imgSrc = `${http_domain + "public/img/"}notfound.gif`;
+        for (const photo of photos) {
+            const { url } = photo;
             html += `
-                <div class="col-12 col-md-6 col-lg-3" id="item-view-${photo.photo_id}">
+                <div class="col-12 col-md-6 col-lg-3" id="item-view-${photo.id}">
                     <div class="card shadow shadow-sm">
-                        <img class="card-img" src="${imgSrc}" alt="${
-                photo.photo_name
-            }" loading="lazy">
+                        <img class="card-img" src="${url}" alt="${photo.name}" loading="lazy">
                         <div class="card-body text-center">
                             <button 
                                 class="btn btn-outline-info p-2 mx-1 shadow-none select ${
-                                    photo.photo_like == true ? "like" : ""
+                                    photo.picked == true ? "like" : ""
                                 }" 
-                                onclick="viewPhoto_uiFunction.likePhoto(${photo.photo_id})"
-                            >
+                                onclick="viewPhoto_uiFunction.likePhoto(${album_id}, '${
+                photo.id
+            }')">
                                 <span class="check"><i class="fa-regular fa-star"></i></span>
                                 <span class="uncheck"><i class="fa-solid fa-star"></i></span>
-                            </button>
-                            <button 
-                                class="btn btn-outline-danger p-2 mx-1" 
-                                onclick="viewPhoto_uiFunction.deletePhoto(${
-                                    photo.photo_id
-                                }, ${album_id})"
-                            >
-                                <i class="fa-solid fa-trash"></i>
                             </button>
                         </div>
                     </div>
@@ -67,16 +53,18 @@ const viewPhoto_uiFunction = {
         link.click();
         link.remove();
     },
-    likePhoto: function (photo_id) {
-        const photo = uiFunction.photoDatabase.find((el) => el.photo_id == photo_id);
-        let isLike = photo.photo_like == false || photo.photo_like == null ? true : false;
-        photo.photo_like = isLike;
+    likePhoto: function (album_id, photo_id) {
+        const { name, picked } = uiFunction.albumDatabase
+            .find((el) => el.album_id == album_id)
+            .album_photos.find((el) => el.id == photo_id);
+        const pick = !picked;
         const formData = new FormData();
-        formData.append("photo_id", photo_id);
-        formData.append("photo_like", isLike);
-        fetch_query(formData, "photo", "updateLike").then((res) => {
-            const btn_like = document.querySelector(`#item-view-${photo.photo_id} button.select`);
-            if (isLike) {
+        formData.append("album_id", album_id);
+        formData.append("album_photo_name", name);
+        formData.append("pick", pick);
+        fetch_query(formData, "album", "pick_photo").then((res) => {
+            const btn_like = document.querySelector(`#item-view-${photo_id} button.select`);
+            if (pick) {
                 btn_like.classList.add("like");
             } else {
                 btn_like.classList.remove("like");

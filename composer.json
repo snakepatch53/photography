@@ -17,7 +17,8 @@
         "vlucas/phpdotenv": "^5.5",
         "php-http/curl-client": "^2.3",
         "guzzlehttp/psr7": "^2.5",
-        "facebook/php-business-sdk": "^16.0"
+        "facebook/php-business-sdk": "^16.0",
+        "intervention/image": "^2.7"
     },
     "config": {
         "allow-plugins": {
