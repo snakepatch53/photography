@@ -1,3 +1,4 @@
 .env
 .htaccess
 /albums
+/public/img.album.optimized
