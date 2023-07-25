@@ -53,7 +53,7 @@ class AlbumService
             'status' => 'success',
             'message' => 'folders obtained successfully',
             'response' => true,
-            'data' => getAlbumsFolder('./public/img.album.optimized/')
+            'data' => getAlbumsFolder('./albums/')
         ]);
     }
 

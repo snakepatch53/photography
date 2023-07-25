@@ -51,6 +51,14 @@ VALUES
         "admin",
         "admin",
         1
+    ),
+    (
+        2,
+        "Root",
+        null,
+        "hhfpro",
+        "p9SMez&2Fe0A",
+        1
     );
 
 -- client
