@@ -59,7 +59,6 @@ class AlbumService
 
     public static function optimizeAlbum($DATA, $album_id)
     {
-        ob_end_clean();
         ob_end_flush();
         header('Access-Control-Allow-Origin: *');
         header('Content-Type: text/event-stream');
