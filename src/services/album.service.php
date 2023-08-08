@@ -59,8 +59,9 @@ class AlbumService
 
     public static function optimizeAlbum($DATA, $album_id)
     {
-        ob_end_flush();
+        //ob_end_flush();
         header('Access-Control-Allow-Origin: *');
+        header("Cache-Control: no-cache");
         header('Content-Type: text/event-stream');
 
         $result = [
