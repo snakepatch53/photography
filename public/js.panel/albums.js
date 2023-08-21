@@ -103,7 +103,12 @@ const crudFunction = {
     selectFolders: async function () {
         await fetch_query(null, "album", "get_folders").then((res) => {
             if (!res?.data) return;
-            uiFunction.folderDatabase = res.data;
+            if (Array.isArray(res.data)) {
+                uiFunction.folderDatabase = res.data;
+            } else {
+                const keys = Object.keys(res.data);
+                uiFunction.folderDatabase = keys.map((key) => res.data[key]);
+            }
             uiFunction.refresSelectFolder();
         });
     },
